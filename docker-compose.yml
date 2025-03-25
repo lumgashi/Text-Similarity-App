@@ -1,0 +1,30 @@
+version: '3'
+services:
+  backend-node:
+    build:
+      context: ./node-backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+      - backend-python
+
+  backend-python:
+    build:
+      context: ./python-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./python-backend/cc.en.300.bin:/app/cc.en.300.bin
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
